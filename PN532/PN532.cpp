@@ -954,6 +954,68 @@ bool PN532::tgSetData(const uint8_t *header, uint8_t hlen, const uint8_t *body, 
     return true;
 }
 
+int16_t PN532::tgGetInitiatorCommand(uint8_t *buf, uint8_t len)
+{
+    buf[0] = PN532_COMMAND_TGGETINITIATORCOMMAND;
+
+    if (HAL(writeCommand)(buf, 1)) {
+        return -1;
+    }
+
+    int16_t status = HAL(readResponse)(buf, len, 3000);
+    if (0 >= status) {
+        return status;
+    }
+
+    uint16_t length = status - 1;
+
+
+    if (buf[0] != 0) {
+        DMSG("status is not ok\n");
+        return -5;
+    }
+
+    for (uint8_t i = 0; i < length; i++) {
+        buf[i] = buf[i + 1];
+    }
+
+    return length;
+}
+
+bool PN532::tgResponseToInitiator(const uint8_t *header, uint8_t hlen, const uint8_t *body, uint8_t blen)
+{
+    if (hlen > (sizeof(pn532_packetbuffer) - 1)) {
+        if ((body != 0) || (header == pn532_packetbuffer)) {
+            DMSG("tgResponseToInitiator:buffer too small\n");
+            return false;
+        }
+
+        pn532_packetbuffer[0] = PN532_COMMAND_TGRESPONSETOINITIATOR;
+        if (HAL(writeCommand)(pn532_packetbuffer, 1, header, hlen)) {
+            return false;
+        }
+    } else {
+        for (int8_t i = hlen - 1; i >= 0; i--){
+            pn532_packetbuffer[i + 1] = header[i];
+        }
+        pn532_packetbuffer[0] = PN532_COMMAND_TGRESPONSETOINITIATOR;
+
+        if (HAL(writeCommand)(pn532_packetbuffer, hlen + 1, body, blen)) {
+            return false;
+        }
+    }
+
+    if (0 > HAL(readResponse)(pn532_packetbuffer, sizeof(pn532_packetbuffer), 3000)) {
+        return false;
+    }
+
+    if (0 != pn532_packetbuffer[0]) {
+        return false;
+    }
+
+    return true;
+}
+
 int16_t PN532::inRelease(const uint8_t relevantTarget){
 
     pn532_packetbuffer[0] = PN532_COMMAND_INRELEASE;
