@@ -145,7 +145,7 @@ void NdefMessage::encode(uint8_t* data)
 
 }
 
-boolean NdefMessage::addRecord(NdefRecord& record)
+bool NdefMessage::addRecord(NdefRecord& record)
 {
 
     if (_recordCount < MAX_NDEF_RECORDS)

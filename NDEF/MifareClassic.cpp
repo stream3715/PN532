@@ -188,14 +188,14 @@ bool MifareClassic::decodeTlv(byte *data, int &messageLength, int &messageStartI
 
 // Intialized NDEF tag contains one empty NDEF TLV 03 00 FE - AN1304 6.3.1
 // We are formatting in read/write mode with a NDEF TLV 03 03 and an empty NDEF record D0 00 00 FE - AN1304 6.3.2
-boolean MifareClassic::formatNDEF(byte * uid, unsigned int uidLength)
+bool MifareClassic::formatNDEF(byte * uid, unsigned int uidLength)
 {
     uint8_t keya[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
     uint8_t emptyNdefMesg[16] = {0x03, 0x03, 0xD0, 0x00, 0x00, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     uint8_t sectorbuffer0[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     uint8_t sectorbuffer4[16] = {0xD3, 0xF7, 0xD3, 0xF7, 0xD3, 0xF7, 0x7F, 0x07, 0x88, 0x40, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    boolean success = _nfcShield->mifareclassic_AuthenticateBlock (uid, uidLength, 0, 0, keya);
+    bool success = _nfcShield->mifareclassic_AuthenticateBlock (uid, uidLength, 0, 0, keya);
     if (!success)
     {
         Serial.println(F("Unable to authenticate block 0 to enable card formatting!"));
@@ -258,7 +258,7 @@ boolean MifareClassic::formatNDEF(byte * uid, unsigned int uidLength)
   ((sector)*NR_BLOCK_OF_SHORTSECTOR + NR_BLOCK_OF_SHORTSECTOR-1):\
   (NR_SHORTSECTOR*NR_BLOCK_OF_SHORTSECTOR + (sector-NR_SHORTSECTOR)*NR_BLOCK_OF_LONGSECTOR + NR_BLOCK_OF_LONGSECTOR-1))
 
-boolean MifareClassic::formatMifare(byte * uid, unsigned int uidLength)
+bool MifareClassic::formatMifare(byte * uid, unsigned int uidLength)
 {
 
     // The default Mifare Classic key
@@ -268,7 +268,7 @@ boolean MifareClassic::formatMifare(byte * uid, unsigned int uidLength)
     uint8_t blankAccessBits[3] = { 0xff, 0x07, 0x80 };
     uint8_t idx = 0;
     uint8_t numOfSector = 16;                         // Assume Mifare Classic 1K for now (16 4-block sectors)
-    boolean success = false;
+    bool success = false;
 
     for (idx = 0; idx < numOfSector; idx++)
     {
@@ -325,7 +325,7 @@ boolean MifareClassic::formatMifare(byte * uid, unsigned int uidLength)
     return true;
 }
 
-boolean MifareClassic::write(NdefMessage& m, byte * uid, unsigned int uidLength)
+bool MifareClassic::write(NdefMessage& m, byte * uid, unsigned int uidLength)
 {
 
     uint8_t encoded[m.getEncodedSize()];

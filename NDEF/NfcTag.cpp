@@ -96,7 +96,7 @@ String NfcTag::getTagType()
     return _tagType;
 }
 
-boolean NfcTag::hasNdefMessage()
+bool NfcTag::hasNdefMessage()
 {
     return (_ndefMessage != NULL);
 }

@@ -18,7 +18,7 @@ class NdefMessage
         int getEncodedSize(); // need so we can pass array to encode
         void encode(byte *data);
 
-        boolean addRecord(NdefRecord& record);
+        bool addRecord(NdefRecord& record);
         void addMimeMediaRecord(String mimeType, String payload);
         void addMimeMediaRecord(String mimeType, byte *payload, int payloadLength);
         void addTextRecord(String text);

@@ -21,7 +21,7 @@ class EmulateFelica{
 public:
   EmulateFelica(PN532Interface &interface) : pn532(interface), idmPtr(0), pmmPtr(0), sysPtr(0) {}
 
-  bool init();
+  void init();
 
   bool emulate(const uint16_t tgInitAsTargetTimeout = 0);
 

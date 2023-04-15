@@ -39,7 +39,7 @@ NfcTag MifareUltralight::read(byte * uid, unsigned int uidLength)
         return NfcTag(uid, uidLength, NFC_FORUM_TAG_TYPE_2, message);
     }
 
-    boolean success;
+    bool success;
     uint8_t page;
     uint8_t index = 0;
     byte buffer[bufferSize];
@@ -75,11 +75,11 @@ NfcTag MifareUltralight::read(byte * uid, unsigned int uidLength)
 
 }
 
-boolean MifareUltralight::isUnformatted()
+bool MifareUltralight::isUnformatted()
 {
     uint8_t page = 4;
     byte data[ULTRALIGHT_READ_SIZE];
-    boolean success = nfc->mifareultralight_ReadPage (page, data);
+    bool success = nfc->mifareultralight_ReadPage (page, data);
     if (success)
     {
         return (data[0] == 0xFF && data[1] == 0xFF && data[2] == 0xFF && data[3] == 0xFF);
@@ -116,7 +116,7 @@ void MifareUltralight::findNdefMessage()
     byte* data_ptr = &data[0];
 
     // the nxp read command reads 4 pages, unfortunately adafruit give me one page at a time
-    boolean success = true;
+    bool success = true;
     for (page = 4; page < 6; page++)
     {
         success = success && nfc->mifareultralight_ReadPage(page, data_ptr);
@@ -162,7 +162,7 @@ void MifareUltralight::calculateBufferSize()
     }
 }
 
-boolean MifareUltralight::write(NdefMessage& m, byte * uid, unsigned int uidLength)
+bool MifareUltralight::write(NdefMessage& m, byte * uid, unsigned int uidLength)
 {
     if (isUnformatted())
     {
@@ -229,7 +229,7 @@ boolean MifareUltralight::write(NdefMessage& m, byte * uid, unsigned int uidLeng
 
 // Mifare Ultralight can't be reset to factory state
 // zero out tag data like the NXP Tag Write Android application
-boolean MifareUltralight::clean()
+bool MifareUltralight::clean()
 {
     readCapabilityContainer(); // meta info for tag
 

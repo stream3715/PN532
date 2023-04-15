@@ -25,16 +25,16 @@ class NfcAdapter {
         NfcAdapter(PN532Interface &interface);
 
         ~NfcAdapter(void);
-        void begin(boolean verbose=true);
-        boolean tagPresent(unsigned long timeout=0); // tagAvailable
+        void begin(bool verbose=true);
+        bool tagPresent(unsigned long timeout=0); // tagAvailable
         NfcTag read();
-        boolean write(NdefMessage& ndefMessage);
+        bool write(NdefMessage& ndefMessage);
         // erase tag by writing an empty NDEF record
-        boolean erase();
+        bool erase();
         // format a tag as NDEF
-        boolean format();
+        bool format();
         // reset tag back to factory state
-        boolean clean();
+        bool clean();
     private:
         PN532* shield;
         byte uid[7];  // Buffer to store the returned UID

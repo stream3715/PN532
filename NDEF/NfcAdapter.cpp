@@ -10,7 +10,7 @@ NfcAdapter::~NfcAdapter(void)
     delete shield;
 }
 
-void NfcAdapter::begin(boolean verbose)
+void NfcAdapter::begin(bool verbose)
 {
     shield->begin();
 
@@ -32,7 +32,7 @@ void NfcAdapter::begin(boolean verbose)
     shield->SAMConfig();
 }
 
-boolean NfcAdapter::tagPresent(unsigned long timeout)
+bool NfcAdapter::tagPresent(unsigned long timeout)
 {
     uint8_t success;
     uidLength = 0;
@@ -48,17 +48,17 @@ boolean NfcAdapter::tagPresent(unsigned long timeout)
     return success;
 }
 
-boolean NfcAdapter::erase()
+bool NfcAdapter::erase()
 {
-    boolean success;
+    bool success;
     NdefMessage message = NdefMessage();
     message.addEmptyRecord();
     return write(message);
 }
 
-boolean NfcAdapter::format()
+bool NfcAdapter::format()
 {
-    boolean success;
+    bool success;
     if (uidLength == 4)
     {
         MifareClassic mifareClassic = MifareClassic(*shield);
@@ -72,7 +72,7 @@ boolean NfcAdapter::format()
     return success;
 }
 
-boolean NfcAdapter::clean()
+bool NfcAdapter::clean()
 {
     uint8_t type = guessTagType();
 
@@ -135,9 +135,9 @@ NfcTag NfcAdapter::read()
 
 }
 
-boolean NfcAdapter::write(NdefMessage& ndefMessage)
+bool NfcAdapter::write(NdefMessage& ndefMessage)
 {
-    boolean success;
+    bool success;
     uint8_t type = guessTagType();
 
     if (type == TAG_TYPE_MIFARE_CLASSIC)
